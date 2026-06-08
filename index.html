@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Brain Prognostic Indices</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 20px;
+			background-color: #f5f5f5;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+		}
+		.container {
+			max-width: 620px;
+			width: 90%;
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.1);
+		}
+		h1 {
+			text-align: center;
+			margin-bottom: 10px;
+			color: #810562d3;
+		}
+		.intro {
+			color: #444;
+			font-size: 15px;
+			line-height: 1.6;
+			text-align: center;
+			margin: 0 auto 30px;
+			max-width: 520px;
+		}
+		.scores {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		.score-item {
+			display: block;
+			border: 1px solid #eee;
+			border-radius: 8px;
+			padding: 16px 18px;
+			margin-bottom: 14px;
+			text-decoration: none;
+			color: inherit;
+			transition: border-color 0.15s, box-shadow 0.15s;
+		}
+		.score-item:hover {
+			border-color: #810562d3;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+		}
+		.score-item.disabled {
+			cursor: default;
+			background-color: #fafafa;
+		}
+		.score-item.disabled:hover {
+			border-color: #eee;
+			box-shadow: none;
+		}
+		.score-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			gap: 10px;
+		}
+		.score-abbr {
+			font-size: 18px;
+			font-weight: bold;
+			color: #810562d3;
+		}
+		.score-name {
+			margin: 4px 0 0;
+			font-size: 14px;
+			color: #555;
+		}
+		.badge {
+			font-size: 11px;
+			font-weight: bold;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			padding: 3px 9px;
+			border-radius: 999px;
+			white-space: nowrap;
+		}
+		.badge.available {
+			background-color: #810562d3;
+			color: #fff;
+		}
+		.badge.soon {
+			background-color: #fff3cd;
+			color: #856404;
+			border: 1px solid #ffeeba;
+		}
+		footer {
+			margin-top: 30px;
+			padding: 20px;
+			background-color: #810562d3;
+			color: #fff;
+			text-align: center;
+			font-size: 14px;
+			border-radius: 0 0 10px 10px;
+			margin-left: -20px;
+			margin-right: -20px;
+			margin-bottom: -20px;
+		}
+		footer a {
+			color: #ffeeba;
+			text-decoration: none;
+		}
+		footer a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Brain Prognostic Indices</h1>
+		<p class="intro">
+			A collection of prognostic calculators for lung cancer patients with
+			brain metastases, developed for research at the Department of
+			Oncology-Pathology, Karolinska Institutet, and the Thoracic Oncology
+			Center, Karolinska University Hospital.
+		</p>
+
+		<ul class="scores">
+
+			<li>
+				<a class="score-item" href="srs-bpi/">
+					<div class="score-head">
+						<span class="score-abbr">SRS-BPI</span>
+						<span class="badge available">Available</span>
+					</div>
+					<p class="score-name">Stereotactic Radiosurgery&ndash;Brain Prognostic Index</p>
+				</a>
+			</li>
+
+			<li>
+				<a class="score-item" href="egfr-bpi/">
+					<div class="score-head">
+						<span class="score-abbr">EGFR-BPI</span>
+						<span class="badge soon">Coming soon</span>
+					</div>
+					<p class="score-name">EGFR Brain Prognostic Index</p>
+				</a>
+			</li>
+
+			<li>
+				<a class="score-item" href="alk-bpi/">
+					<div class="score-head">
+						<span class="score-abbr">ALK-BPI</span>
+						<span class="badge soon">Coming soon</span>
+					</div>
+					<p class="score-name">ALK Brain Prognostic Index</p>
+				</a>
+			</li>
+
+			<li>
+				<a class="score-item" href="kras-bpi/">
+					<div class="score-head">
+						<span class="score-abbr">KRAS-BPI</span>
+						<span class="badge soon">Coming soon</span>
+					</div>
+					<p class="score-name">KRAS Brain Prognostic Index</p>
+				</a>
+			</li>
+
+		</ul>
+
+		<footer>
+			<p>&copy; 2026 Department of Oncology-Pathology, Karolinska Institutet/Thoracic Oncology Center, Karolinska University Hospital, Stockholm, Sweden.</p>
+			<p>The website code is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License.</a></p>
+			<p>Contact: <a href="mailto:mdp2011902@med.uoc.gr">mdp2011902@med.uoc.gr</a></p>
+		</footer>
+
+	</div>
+
+</body>
+</html>
