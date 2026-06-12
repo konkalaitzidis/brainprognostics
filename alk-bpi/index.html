@@ -5,57 +5,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>ALK-BPI</title>
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-			background-color: #f5f5f5;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-		}
-		.container {
-			max-width: 560px;
-			width: 90%;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0,0,0,0.1);
-		}
-		.navbar { overflow: hidden; margin-bottom: 10px; }
+		body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: flex-start; }
+		.container { max-width: 500px; width: 90%; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+		.navbar { overflow: hidden; }
 		.navbar a { color: #810562d3; text-decoration: none; font-size: 14px; }
 		.navbar a:hover { text-decoration: underline; }
-		h1 { text-align: center; margin-bottom: 6px; color: #810562d3; }
-		.fullname { text-align: center; color: #555; font-size: 14px; margin: 0 0 24px; }
-		.soon {
-			text-align: center;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 8px;
-			padding: 24px 18px;
-			font-size: 16px;
-		}
-		.reference {
-			margin-top: 20px;
-			padding: 15px;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 5px;
-			font-size: 14px;
-		}
+		h1 { text-align: center; margin-bottom: 8px; color: #810562d3; }
+		.subtitle { text-align: center; color: #555; font-size: 14px; margin: 0 0 30px; }
+		label { font-weight: bold; margin-bottom: 5px; display: block; }
+		select { width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+		button { padding: 10px 20px; background-color: #810562d3; color: #fff; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block; }
+		#result { margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #f0f0f0; text-align: center; font-size: 16px; line-height: 1.5; }
+		.reference { margin-top: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 5px; font-size: 14px; }
 		.reference a { color: #856404; }
-		footer {
-			margin-top: 30px;
-			padding: 20px;
-			background-color: #810562d3;
-			color: #fff;
-			text-align: center;
-			font-size: 14px;
-			border-radius: 0 0 10px 10px;
-			margin: 30px -20px -20px;
-		}
+		.caution { margin-top: 15px; font-size: 12px; color: #777; text-align: center; }
+		footer { margin: 20px -20px -20px; padding: 20px; background-color: #810562d3; color: #fff; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px; }
 		footer a { color: #ffeeba; text-decoration: none; }
 		footer a:hover { text-decoration: underline; }
 	</style>
@@ -69,17 +33,44 @@
 		</div>
 
 		<h1>ALK-BPI</h1>
-		<p class="fullname">ALK Brain Prognostic Index</p>
+		<p class="subtitle">ALK Brain Prognostic Index</p>
 
-		<div class="soon">
-			This calculator is coming soon.
-		</div>
+		<form id="calculator-form" onsubmit="return false;">
 
-		<div class="reference">
-			References:
-			<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7408161/" target="_blank">Primary reference (PMC7408161)</a> &middot;
-			<a href="https://pubmed.ncbi.nlm.nih.gov/37988952/" target="_blank">PubMed 37988952</a>
-		</div>
+			<label for="bm_diag">Brain metastases at diagnosis:</label>
+			<select id="bm_diag" required>
+				<option value="">Select</option>
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+			</select>
+
+			<label for="ps">Performance status (ECOG):</label>
+			<select id="ps" required>
+				<option value="">Select</option>
+				<option value="1">0&ndash;1</option>
+				<option value="0.5">2</option>
+				<option value="0">3&ndash;4</option>
+			</select>
+
+			<label for="sex">Sex:</label>
+			<select id="sex" required>
+				<option value="">Select</option>
+				<option value="0">Male</option>
+				<option value="0.5">Female</option>
+			</select>
+
+			<button type="button" onclick="calculateResult()">Calculate</button>
+			<div id="result"></div>
+
+			<div class="reference">
+				References:
+				<a href="https://pubmed.ncbi.nlm.nih.gov/32640547/" target="_blank">Tsakonas et al. (PMID 32640547)</a> &middot;
+				<a href="https://pubmed.ncbi.nlm.nih.gov/37988952/" target="_blank">Zerdes et al. (PMID 37988952)</a>
+			</div>
+
+			<p class="caution">For research and educational purposes only. Interpret with clinical judgment.</p>
+
+		</form>
 
 		<footer>
 			<p>&copy; 2026 Department of Oncology-Pathology, Karolinska Institutet/Thoracic Oncology Center, Karolinska University Hospital, Stockholm, Sweden.</p>
@@ -88,6 +79,33 @@
 		</footer>
 
 	</div>
+
+	<script>
+		function calculateResult() {
+			var bm = document.getElementById('bm_diag').value;
+			var ps = document.getElementById('ps').value;
+			var sex = document.getElementById('sex').value;
+
+			if (bm === '' || ps === '' || sex === '') {
+				document.getElementById('result').innerHTML = 'Please complete all fields.';
+				return;
+			}
+
+			var score = parseFloat(bm) + parseFloat(ps) + parseFloat(sex);
+
+			var group, mos;
+			if (score >= 1.5) {
+				group = 'Good prognosis group (1.5&ndash;2.5 points)';
+				mos = 'Median overall survival: 65.7 months (95% CI 47.3&ndash;84.1)';
+			} else {
+				group = 'Poor prognosis group (0&ndash;1.0 points)';
+				mos = 'Median overall survival: 22.7 months (95% CI 14.8&ndash;30.5)';
+			}
+
+			document.getElementById('result').innerHTML =
+				'<strong>Total score: ' + score.toFixed(1) + '</strong><br>' + group + '<br>' + mos;
+		}
+	</script>
 
 </body>
 </html>

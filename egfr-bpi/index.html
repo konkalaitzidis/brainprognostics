@@ -5,59 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>EGFR-BPI</title>
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-			background-color: #f5f5f5;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-		}
-		.container {
-			max-width: 560px;
-			width: 90%;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0,0,0,0.1);
-		}
-		.navbar { overflow: hidden; margin-bottom: 10px; }
+		body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: flex-start; }
+		.container { max-width: 500px; width: 90%; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+		.navbar { overflow: hidden; }
 		.navbar a { color: #810562d3; text-decoration: none; font-size: 14px; }
 		.navbar a:hover { text-decoration: underline; }
-		h1 { text-align: center; margin-bottom: 6px; color: #810562d3; }
-		.fullname { text-align: center; color: #555; font-size: 14px; margin: 0 0 24px; }
-		.soon {
-			text-align: center;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 8px;
-			padding: 24px 18px;
-			font-size: 16px;
-		}
-		.reference {
-			margin-top: 20px;
-			padding: 15px;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 5px;
-			font-size: 14px;
-		}
+		h1 { text-align: center; margin-bottom: 8px; color: #810562d3; }
+		.subtitle { text-align: center; color: #555; font-size: 14px; margin: 0 0 30px; }
+		label { font-weight: bold; margin-bottom: 5px; display: block; }
+		select, input[type="number"] { width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+		button { padding: 10px 20px; background-color: #810562d3; color: #fff; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block; }
+		#result { margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #f0f0f0; text-align: center; font-size: 16px; line-height: 1.6; }
+		.reference { margin-top: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 5px; font-size: 14px; }
 		.reference a { color: #856404; }
-		footer {
-			margin-top: 30px;
-			padding: 20px;
-			background-color: #810562d3;
-			color: #fff;
-			text-align: center;
-			font-size: 14px;
-			border-radius: 0 0 10px 10px;
-			margin: 30px -20px -20px;
-		}
+		.caution { margin-top: 15px; font-size: 12px; color: #777; text-align: center; }
+		footer { margin: 20px -20px -20px; padding: 20px; background-color: #810562d3; color: #fff; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px; }
 		footer a { color: #ffeeba; text-decoration: none; }
 		footer a:hover { text-decoration: underline; }
+		.err { color: red; font-size: 13px; margin: -10px 0 12px; }
 	</style>
 </head>
 <body>
@@ -69,11 +34,59 @@
 		</div>
 
 		<h1>EGFR-BPI</h1>
-		<p class="fullname">EGFR Brain Prognostic Index</p>
+		<p class="subtitle">EGFR Brain Prognostic Index</p>
 
-		<div class="soon">
-			This calculator is coming soon.
-		</div>
+		<form id="calculator-form" onsubmit="return false;">
+
+			<label for="age">Age (years):</label>
+			<input type="number" id="age" placeholder="Input example: 65" required>
+
+			<label for="bm_diag">Brain metastases at diagnosis:</label>
+			<select id="bm_diag" required>
+				<option value="">Select</option>
+				<option value="1">Yes</option>
+				<option value="0">No</option>
+			</select>
+
+			<label for="ecog">Performance status (ECOG):</label>
+			<select id="ecog" required>
+				<option value="">Select</option>
+				<option value="1">0&ndash;1 (good)</option>
+				<option value="0">2&ndash;4 (poor)</option>
+			</select>
+
+			<label for="num_bm">Number of brain metastases:</label>
+			<select id="num_bm" required>
+				<option value="">Select</option>
+				<option value="1">1</option>
+				<option value="2-4">2&ndash;4</option>
+				<option value=">4">&gt;4</option>
+			</select>
+
+			<label for="primary">Primary disease under control:</label>
+			<select id="primary" required>
+				<option value="">Select</option>
+				<option value="1">Yes</option>
+				<option value="0">No</option>
+			</select>
+
+			<label for="subtype">EGFR mutation subtype:</label>
+			<select id="subtype" required>
+				<option value="">Select</option>
+				<option value="0">Exon 19 deletion (&plusmn; co-mutations)</option>
+				<option value="1">Non-exon 19 deletion (L858R, T790M, exon 20 ins, other)</option>
+			</select>
+
+			<button type="button" onclick="calculateResult()">Calculate</button>
+			<div id="result"></div>
+
+			<div class="reference">
+				Reference: Koulouris et al. <em>EGFR-BPI: Development and Internal Validation of a Prognostic Tool for Overall Survival in EGFR-Mutated NSCLC with Brain Metastases.</em> Manuscript in preparation &mdash; not yet peer-reviewed.
+			</div>
+
+			<p class="caution">For research and educational purposes only. This model is internally validated and has not yet undergone peer review. Interpret with clinical judgment.</p>
+
+		</form>
 
 		<footer>
 			<p>&copy; 2026 Department of Oncology-Pathology, Karolinska Institutet/Thoracic Oncology Center, Karolinska University Hospital, Stockholm, Sweden.</p>
@@ -82,6 +95,49 @@
 		</footer>
 
 	</div>
+
+	<script>
+		function calculateResult() {
+			var ageVal = document.getElementById('age').value;
+			var bm = document.getElementById('bm_diag').value;
+			var ecog = document.getElementById('ecog').value;
+			var numBm = document.getElementById('num_bm').value;
+			var primary = document.getElementById('primary').value;
+			var subtype = document.getElementById('subtype').value;
+
+			if (ageVal === '' || bm === '' || ecog === '' || numBm === '' || primary === '' || subtype === '') {
+				document.getElementById('result').innerHTML = 'Please complete all fields.';
+				return;
+			}
+
+			var age = parseFloat(ageVal);
+			if (isNaN(age)) {
+				document.getElementById('result').innerHTML = 'Please enter a valid age.';
+				return;
+			}
+
+			var bmOligo = (numBm === '2-4') ? 1 : 0;
+			var bmMultiple = (numBm === '>4') ? 1 : 0;
+
+			// Shrinkage-adjusted (beta x 0.864) linear predictor, centered on cohort means
+			var LP =
+				  0.0089 * (age - 64.56)
+				- 0.4481 * (parseInt(bm, 10) - 0.556)
+				- 0.3580 * (parseInt(ecog, 10) - 0.822)
+				+ 0.1184 * (bmOligo - 0.257)
+				+ 0.4997 * (bmMultiple - 0.486)
+				- 0.1845 * (parseInt(primary, 10) - 0.322)
+				+ 0.3379 * (parseInt(subtype, 10) - 0.556);
+
+			var s1 = Math.pow(0.5058, Math.exp(LP)) * 100;
+			var s2 = Math.pow(0.193, Math.exp(LP)) * 100;
+
+			document.getElementById('result').innerHTML =
+				'<strong>Predicted overall survival</strong><br>' +
+				'1-year: ' + s1.toFixed(1) + '%<br>' +
+				'2-year: ' + s2.toFixed(1) + '%';
+		}
+	</script>
 
 </body>
 </html>

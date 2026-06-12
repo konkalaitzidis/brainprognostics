@@ -5,57 +5,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>KRAS-BPI</title>
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-			background-color: #f5f5f5;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-		}
-		.container {
-			max-width: 560px;
-			width: 90%;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0,0,0,0.1);
-		}
-		.navbar { overflow: hidden; margin-bottom: 10px; }
+		body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: flex-start; }
+		.container { max-width: 500px; width: 90%; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+		.navbar { overflow: hidden; }
 		.navbar a { color: #810562d3; text-decoration: none; font-size: 14px; }
 		.navbar a:hover { text-decoration: underline; }
-		h1 { text-align: center; margin-bottom: 6px; color: #810562d3; }
-		.fullname { text-align: center; color: #555; font-size: 14px; margin: 0 0 24px; }
-		.soon {
-			text-align: center;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 8px;
-			padding: 24px 18px;
-			font-size: 16px;
-		}
-		.reference {
-			margin-top: 20px;
-			padding: 15px;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			color: #856404;
-			border-radius: 5px;
-			font-size: 14px;
-		}
+		h1 { text-align: center; margin-bottom: 8px; color: #810562d3; }
+		.subtitle { text-align: center; color: #555; font-size: 14px; margin: 0 0 30px; }
+		label { font-weight: bold; margin-bottom: 5px; display: block; }
+		select { width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+		button { padding: 10px 20px; background-color: #810562d3; color: #fff; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block; }
+		#result { margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #f0f0f0; text-align: center; font-size: 16px; line-height: 1.5; }
+		.reference { margin-top: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 5px; font-size: 14px; }
 		.reference a { color: #856404; }
-		footer {
-			margin-top: 30px;
-			padding: 20px;
-			background-color: #810562d3;
-			color: #fff;
-			text-align: center;
-			font-size: 14px;
-			border-radius: 0 0 10px 10px;
-			margin: 30px -20px -20px;
-		}
+		.caution { margin-top: 15px; font-size: 12px; color: #777; text-align: center; }
+		footer { margin: 20px -20px -20px; padding: 20px; background-color: #810562d3; color: #fff; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px; }
 		footer a { color: #ffeeba; text-decoration: none; }
 		footer a:hover { text-decoration: underline; }
 	</style>
@@ -69,16 +33,63 @@
 		</div>
 
 		<h1>KRAS-BPI</h1>
-		<p class="fullname">KRAS Brain Prognostic Index</p>
+		<p class="subtitle">KRAS Brain Prognostic Index</p>
 
-		<div class="soon">
-			This calculator is coming soon.
-		</div>
+		<form id="calculator-form" onsubmit="return false;">
 
-		<div class="reference">
-			Reference:
-			<a href="https://www.lungcancerjournal.info/article/S0169-5002(24)00599-3/fulltext" target="_blank">KRAS Brain Prognostic Index &ndash; Lung Cancer (journal)</a>
-		</div>
+			<label for="age">Age:</label>
+			<select id="age" required>
+				<option value="">Select</option>
+				<option value="1">&le;70 years</option>
+				<option value="0">&gt;70 years</option>
+			</select>
+
+			<label for="ps">Performance status (ECOG):</label>
+			<select id="ps" required>
+				<option value="">Select</option>
+				<option value="1">0&ndash;2 (&lt;3)</option>
+				<option value="0">3&ndash;4</option>
+			</select>
+
+			<label for="bm_disease">Brain metastatic disease:</label>
+			<select id="bm_disease" required>
+				<option value="">Select</option>
+				<option value="1">Primary</option>
+				<option value="0">Secondary</option>
+			</select>
+
+			<label for="extracranial">Extracranial metastases:</label>
+			<select id="extracranial" required>
+				<option value="">Select</option>
+				<option value="1">No</option>
+				<option value="0">Yes</option>
+			</select>
+
+			<label for="cns">Symptomatic CNS disease:</label>
+			<select id="cns" required>
+				<option value="">Select</option>
+				<option value="1">No</option>
+				<option value="0">Yes</option>
+			</select>
+
+			<label for="num_bm">Number of brain metastases:</label>
+			<select id="num_bm" required>
+				<option value="">Select</option>
+				<option value="1">1&ndash;4</option>
+				<option value="0">&gt;4</option>
+			</select>
+
+			<button type="button" onclick="calculateResult()">Calculate</button>
+			<div id="result"></div>
+
+			<div class="reference">
+				Reference:
+				<a href="https://pubmed.ncbi.nlm.nih.gov/39705826/" target="_blank">Zerdes et al. (PMID 39705826)</a>
+			</div>
+
+			<p class="caution">For research and educational purposes only. Interpret with clinical judgment.</p>
+
+		</form>
 
 		<footer>
 			<p>&copy; 2026 Department of Oncology-Pathology, Karolinska Institutet/Thoracic Oncology Center, Karolinska University Hospital, Stockholm, Sweden.</p>
@@ -87,6 +98,36 @@
 		</footer>
 
 	</div>
+
+	<script>
+		function calculateResult() {
+			var ids = ['age','ps','bm_disease','extracranial','cns','num_bm'];
+			var score = 0;
+			for (var i = 0; i < ids.length; i++) {
+				var v = document.getElementById(ids[i]).value;
+				if (v === '') {
+					document.getElementById('result').innerHTML = 'Please complete all fields.';
+					return;
+				}
+				score += parseInt(v, 10);
+			}
+
+			var group, mos;
+			if (score >= 5) {
+				group = 'Favorable prognosis (5.0&ndash;6.0 points)';
+				mos = 'Median overall survival: 30.0 months (95% CI 17.0&ndash;43.0)';
+			} else if (score >= 3) {
+				group = 'Intermediate prognosis (3.0&ndash;4.0 points)';
+				mos = 'Median overall survival: 9.0 months (95% CI 6.4&ndash;11.6)';
+			} else {
+				group = 'Poor prognosis (0.0&ndash;2.0 points)';
+				mos = 'Median overall survival: 2.0 months (95% CI 1.2&ndash;2.8)';
+			}
+
+			document.getElementById('result').innerHTML =
+				'<strong>Total score: ' + score + '</strong><br>' + group + '<br>' + mos;
+		}
+	</script>
 
 </body>
 </html>
