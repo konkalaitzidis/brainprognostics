@@ -22,7 +22,6 @@
 		footer { margin: 20px -20px -20px; padding: 20px; background-color: #810562d3; color: #fff; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px; }
 		footer a { color: #ffeeba; text-decoration: none; }
 		footer a:hover { text-decoration: underline; }
-		.err { color: red; font-size: 13px; margin: -10px 0 12px; }
 	</style>
 </head>
 <body>
@@ -73,8 +72,9 @@
 			<label for="subtype">EGFR mutation subtype:</label>
 			<select id="subtype" required>
 				<option value="">Select</option>
-				<option value="0">Exon 19 deletion (&plusmn; co-mutations)</option>
-				<option value="1">Non-exon 19 deletion (L858R, T790M, exon 20 ins, other)</option>
+				<option value="exon19del">Exon 19 deletion</option>
+				<option value="L858R">L858R</option>
+				<option value="other">Other (T790M, exon 20 insertion, uncommon)</option>
 			</select>
 
 			<button type="button" onclick="calculateResult()">Calculate</button>
@@ -91,7 +91,7 @@
 		<footer>
 			<p>&copy; 2026 Department of Oncology-Pathology, Karolinska Institutet/Thoracic Oncology Center, Karolinska University Hospital, Stockholm, Sweden.</p>
 			<p>The website code is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License.</a></p>
-			<p>Contact: <a href="mailto:mdp2011902@med.uoc.gr">mdp2011902@med.uoc.gr</a></p>
+			<p>Contact: <a href="mailto:andreas.koulouris@ki.se">andreas.koulouris@ki.se</a></p>
 		</footer>
 
 	</div>
@@ -116,18 +116,24 @@
 				return;
 			}
 
+			// Number of BM: two dummies, reference = single (1) -> both 0
 			var bmOligo = (numBm === '2-4') ? 1 : 0;
 			var bmMultiple = (numBm === '>4') ? 1 : 0;
 
-			// Shrinkage-adjusted (beta x 0.864) linear predictor, centered on cohort means
+			// EGFR subtype: two dummies, reference = exon 19 deletion -> both 0
+			var l858r = (subtype === 'L858R') ? 1 : 0;
+			var other = (subtype === 'other') ? 1 : 0;
+
+			// Shrinkage-adjusted linear predictor, centered on cohort means (8 terms)
 			var LP =
-				  0.0089 * (age - 64.56)
-				- 0.4481 * (parseInt(bm, 10) - 0.556)
-				- 0.3580 * (parseInt(ecog, 10) - 0.822)
-				+ 0.1184 * (bmOligo - 0.257)
-				+ 0.4997 * (bmMultiple - 0.486)
-				- 0.1845 * (parseInt(primary, 10) - 0.322)
-				+ 0.3379 * (parseInt(subtype, 10) - 0.556);
+				  0.0082 * (age - 64.56)
+				- 0.4467 * (parseInt(bm, 10) - 0.556)
+				- 0.3608 * (parseInt(ecog, 10) - 0.822)
+				+ 0.1246 * (bmOligo - 0.257)
+				+ 0.4858 * (bmMultiple - 0.486)
+				- 0.1778 * (parseInt(primary, 10) - 0.322)
+				+ 0.3747 * (l858r - 0.411)
+				+ 0.1886 * (other - 0.145);
 
 			var s1 = Math.pow(0.5058, Math.exp(LP)) * 100;
 			var s2 = Math.pow(0.193, Math.exp(LP)) * 100;
