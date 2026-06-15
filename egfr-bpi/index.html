@@ -29,7 +29,7 @@
 	<div class="container">
 
 		<div class="navbar">
-			<a href="../">&larr; All indices</a>
+			<a href="../">&larr; Back</a>
 		</div>
 
 		<h1>EGFR-BPI</h1>
@@ -126,14 +126,13 @@
 
 			// Shrinkage-adjusted linear predictor, centered on cohort means (8 terms)
 			var LP =
-				  0.0082 * (age - 64.56)
-				- 0.4467 * (parseInt(bm, 10) - 0.556)
-				- 0.3608 * (parseInt(ecog, 10) - 0.822)
-				+ 0.1246 * (bmOligo - 0.257)
-				+ 0.4858 * (bmMultiple - 0.486)
-				- 0.1778 * (parseInt(primary, 10) - 0.322)
-				+ 0.3747 * (l858r - 0.411)
-				+ 0.1886 * (other - 0.145);
+				  0.0089 * (age - 64.56)
+				- 0.4481 * (parseInt(bm, 10) - 0.556)
+				- 0.3580 * (parseInt(ecog, 10) - 0.822)
+				+ 0.1184 * (bmOligo - 0.257)
+				+ 0.4997 * (bmMultiple - 0.486)
+				- 0.1845 * (parseInt(primary, 10) - 0.322)
+				+ 0.3379 * (parseInt(subtype, 10) - 0.556);
 
 			var s1 = Math.pow(0.5058, Math.exp(LP)) * 100;
 			var s2 = Math.pow(0.193, Math.exp(LP)) * 100;
