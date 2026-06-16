@@ -29,7 +29,7 @@
 	<div class="container">
 
 		<div class="navbar">
-			<a href="../">&larr; Back</a>
+			<a href="../">&larr; All indices</a>
 		</div>
 
 		<h1>EGFR-BPI</h1>
@@ -72,9 +72,8 @@
 			<label for="subtype">EGFR mutation subtype:</label>
 			<select id="subtype" required>
 				<option value="">Select</option>
-				<option value="exon19del">Exon 19 deletion</option>
-				<option value="L858R">L858R</option>
-				<option value="other">Other (T790M, exon 20 insertion, uncommon)</option>
+				<option value="0">Exon 19 deletion</option>
+				<option value="1">Non-exon 19 deletion</option>
 			</select>
 
 			<button type="button" onclick="calculateResult()">Calculate</button>
@@ -120,11 +119,7 @@
 			var bmOligo = (numBm === '2-4') ? 1 : 0;
 			var bmMultiple = (numBm === '>4') ? 1 : 0;
 
-			// EGFR subtype: two dummies, reference = exon 19 deletion -> both 0
-			var l858r = (subtype === 'L858R') ? 1 : 0;
-			var other = (subtype === 'other') ? 1 : 0;
-
-			// Shrinkage-adjusted linear predictor, centered on cohort means (8 terms)
+			// Shrinkage-adjusted (beta x 0.864) linear predictor, centered on cohort means
 			var LP =
 				  0.0089 * (age - 64.56)
 				- 0.4481 * (parseInt(bm, 10) - 0.556)
